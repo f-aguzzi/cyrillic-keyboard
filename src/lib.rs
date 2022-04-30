@@ -1,6 +1,6 @@
 
 
-pub fn parselatin(string: String) -> String {
+pub fn parselatin(string: &String) -> String {
 
     let mut text: Vec<char> = Vec::new();
                         

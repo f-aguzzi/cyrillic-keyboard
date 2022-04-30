@@ -6,6 +6,7 @@ use lib::parselatin;
 #[derive(Default, Debug, Clone)]
 struct CyrillicKeyboard {
     text: String,
+    convertedtext: String,
     input: text_input::State
 }
 
@@ -24,13 +25,14 @@ impl Sandbox for CyrillicKeyboard {
     }
 
     fn title(&self) -> String {
-        String::from("AguMatrix")
+        String::from("Cyrillic Keyboard")
     }
 
     fn update(&mut self, message: Message) {
         match message {
             Message::InputChanged(value) => {
-                self.text = parselatin(value)
+                self.convertedtext = parselatin(&value);
+                self.text = value
             }
         }
     }
@@ -57,7 +59,7 @@ impl Sandbox for CyrillicKeyboard {
             .height(iced::Length::Shrink)
             .align_items(iced::Align::Center)
             .push(
-                Text::new(self.text.to_string())
+                Text::new(self.convertedtext.to_string())
                 .size(24)
             )
         )
