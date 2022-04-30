@@ -1,4 +1,12 @@
+extern crate clipboard;
 
+use clipboard::ClipboardProvider;
+use clipboard::ClipboardContext;
+
+pub fn clipboard(string: &String) {
+    let mut ctx: ClipboardContext = ClipboardProvider::new().unwrap();
+    ctx.set_contents(string.to_owned()).unwrap();
+}
 
 pub fn parselatin(string: &String) -> String {
 

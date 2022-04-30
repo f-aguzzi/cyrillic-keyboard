@@ -1,19 +1,21 @@
-use iced::{Text, Settings, text_input, Sandbox, Element, Column};
+use iced::{ Text, Settings, text_input, Sandbox, Element, Column };
 
 mod lib;
-use lib::parselatin;
+use lib::{ parselatin, clipboard };
 
 #[derive(Default, Debug, Clone)]
 struct CyrillicKeyboard {
     text: String,
     convertedtext: String,
-    input: text_input::State
+    input: text_input::State,
+    button: iced::button::State
 }
 
 
 #[derive(Debug, Clone)]
 enum Message {
     InputChanged(String),
+    ButtonClicked,
 }
 
 impl Sandbox for CyrillicKeyboard {
@@ -33,6 +35,9 @@ impl Sandbox for CyrillicKeyboard {
             Message::InputChanged(value) => {
                 self.convertedtext = parselatin(&value);
                 self.text = value
+            },
+            Message::ButtonClicked => {
+                clipboard(&self.convertedtext);
             }
         }
     }
@@ -49,7 +54,7 @@ impl Sandbox for CyrillicKeyboard {
             .height(iced::Length::Shrink)
             .align_items(iced::Align::Center)
             .push(
-                Text::new("Cyrillic Keyboard")
+                iced::Text::new("Cyrillic Keyboard")
                 .size(60)
             )
         )
@@ -73,6 +78,11 @@ impl Sandbox for CyrillicKeyboard {
                 .padding(10)
             )
 
+        )
+        .push(
+            iced::Button::new(&mut self.button, Text::new("Copy to clipboard"))
+            .on_press(Message::ButtonClicked)
+            .padding(12)
         )
         .height(iced::Length::Shrink)
         .into()
